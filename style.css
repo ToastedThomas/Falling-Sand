@@ -1,0 +1,11 @@
+#elementHolder {
+  display: flex;
+}
+#elementHolder div {
+  border: black 1px solid;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: center;
+  margin: 5px;
+  width: 100px;
+}
