@@ -138,6 +138,15 @@ cvs.onmousedown = function(event) {
   //setting the rate at how fast elements are placed
   placingInterval = setInterval(placing, 20, event);
 }
+cvs.touchmove = function(event) {
+    //tracking finger location for mobile placing
+    cursorX = event.clientX;
+    cursorY = event.clientY;
+}
+cvs.touchstart = function(event) {
+    //setting the rate at how fast elements are placed
+    placingInterval = setInterval(placing, 20, event);
+}
 function placing(event) {
   setBuf((Math.floor(cursorX/10) - 1) /* + (Math.floor(Math.random() * 3) - 1)*/, Math.floor(cursorY/10) - 1, selectedItem);
   //console.log(Math.floor(cursorX/10) - 1)
@@ -153,6 +162,16 @@ cvs.onmouseleave = function() {
   clearInterval(placingInterval);
   placingInterval = null;
 }
+cvs.touchend = function() {
+    //turns off the placing loop for mobile
+    clearInterval(placingInterval);
+    placingInterval = null;
+}
+cvs.touchcancel = function() {
+    //also turns off the placing loop for mobile
+    clearInterval(placingInterval);
+    placingInterval = null;
+  }
 
 function tick() {
     think();
