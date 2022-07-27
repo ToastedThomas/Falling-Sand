@@ -1,6 +1,6 @@
 
-var width = 50;
-var height = 50;
+var width = 155;
+var height = 70;
 var cellSize = 10;
 var cvs = document.getElementById('cvs');
 cvs.width = width * cellSize;
@@ -55,16 +55,6 @@ function selectItem(item) {
   console.log(selectedItem)
 }
 
-function placeSand() {
-    // place sand at top of screen
-    setBuf(Math.floor(width / 2) + Math.floor(Math.random() * 6) - 3, 3, SAND);
-}
-
-function placeWater() {
-    // place water at the top of screen
-    setBuf(Math.floor(width / 2) + Math.floor(Math.random() * 6) - 3, 3, WATER);
-}
-
 var emptyOrLiquid = [EMPTY, WATER];
 
 function think() {
@@ -88,8 +78,10 @@ function think() {
                         setBuf(x, y + 1, SAND); // move sand
                     }
                 } else if (emptyOrLiquid.indexOf(getBuf(x + dir, y + 1)) >= 0) { // if empty/liquid diagonal
-                    setBuf(x, y, getBuf(x + dir, y + 1)); // clear sand
-                    setBuf(x + dir, y + 1, SAND); // move sand
+                   if (emptyOrLiquid.indexOf(getBuf(x + dir, y)) >= 0) { // checks for wall in direction of travel, prevents falling through "cracks"
+                        setBuf(x, y, getBuf(x + dir, y + 1)); // clear sand
+                        setBuf(x + dir, y + 1, SAND); // move sand
+                    }
                 } 
             } else if (getBuf(x, y) == WATER) { // if we have water
                 if (getBuf(x, y + 1) == EMPTY) { // if empty below
@@ -128,6 +120,9 @@ function draw() {
 let placingInterval;
 let cursorX;
 let cursorY;
+let marginVal = parseInt(getComputedStyle(cvs).getPropertyValue('margin-left'));
+document.getElementById('elementHolder').style.marginLeft = marginVal + 'px';
+console.log(marginVal/10)
 
 cvs.onmousemove = function(event) {
   //tracking mouse location for placing
@@ -148,7 +143,8 @@ cvs.touchstart = function(event) {
     placingInterval = setInterval(placing, 20, event);
 }
 function placing(event) {
-  setBuf((Math.floor(cursorX/10) - 1) /* + (Math.floor(Math.random() * 3) - 1)*/, Math.floor(cursorY/10) - 1, selectedItem);
+  marginVal = parseInt(getComputedStyle(cvs).getPropertyValue('margin-left'));
+  setBuf((Math.floor(cursorX/10) - 1 - Math.floor(marginVal/10)) /* + (Math.floor(Math.random() * 3) - 1)*/, Math.floor(cursorY/10) - 1, selectedItem);
   //console.log(Math.floor(cursorX/10) - 1)
   //console.log(Math.floor(cursorY/10) - 1)
 }
@@ -177,12 +173,6 @@ function tick() {
     think();
     draw();
 }
-
-// place sand every second
-//setInterval(placeSand, 1000);
-
-// place water every quarter second
-//setInterval(placeWater, 250);
 
 // draw a frame every 0.01 second
 setInterval(tick, 10);

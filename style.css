@@ -1,3 +1,8 @@
+#cvs {
+  display: block;
+  margin: 0px auto;
+}
+
 #elementHolder {
   display: flex;
 }
@@ -6,6 +11,6 @@
   padding-top: 5px;
   padding-bottom: 5px;
   text-align: center;
-  margin: 5px;
+  margin: 10px 10px 10px 0px;
   width: 100px;
 }
