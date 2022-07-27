@@ -11,11 +11,13 @@ var EMPTY = 0;
 var WALL = 1;
 var SAND = 2;
 var WATER = 3;
+var OIL = 4;
 var colors = {};
 colors[EMPTY] = '#999';
 colors[WALL] = '#444';
 colors[SAND] = '#ff4';
 colors[WATER] = '#00f';
+colors[OIL] = '#324D25';
 var selectedItem = SAND;
 
 // set all cells to empty
@@ -49,13 +51,22 @@ document.getElementById('wall').onclick = function() {selectItem(WALL);}
 document.getElementById('sand').onclick = function() {selectItem(SAND);}
 document.getElementById('water').onclick = function() {selectItem(WATER);}
 document.getElementById('void').onclick = function() {selectItem(EMPTY);}
+document.getElementById('oil').onclick = function() {selectItem(OIL);}
+
+// setting color of buttons with stored color
+document.getElementById('wall').style.backgroundColor = colors[WALL];
+document.getElementById('sand').style.backgroundColor = colors[SAND];
+document.getElementById('water').style.backgroundColor = colors[WATER];
+document.getElementById('void').style.backgroundColor = colors[EMPTY];
+document.getElementById('oil').style.backgroundColor = colors[OIL];
+
 function selectItem(item) {
   //make clicked on div the selected element
   selectedItem = item;
   console.log(selectedItem)
 }
 
-var emptyOrLiquid = [EMPTY, WATER];
+var emptyOrLiquid = [EMPTY, WATER, OIL];
 
 function think() {
     for (var y = height - 1; y >= 0; y--) {
@@ -84,15 +95,29 @@ function think() {
                     }
                 } 
             } else if (getBuf(x, y) == WATER) { // if we have water
-                if (getBuf(x, y + 1) == EMPTY) { // if empty below
-                    setBuf(x, y, EMPTY); // clear water
+                if (getBuf(x, y + 1) == EMPTY || getBuf(x, y + 1) == OIL) { // if empty below
+                    setBuf(x, y, getBuf(x, y + 1)); // clear water
                     setBuf(x, y + 1, WATER); // move water
-                } else if (getBuf(x + dir, y) == EMPTY) {
-                    moveHoriz.push({
+                } else if (getBuf(x + dir, y) == EMPTY || getBuf(x + dir, y) == OIL) {
+                    setBuf(x, y, getBuf(x + dir, y)); // clear water
+                    setBuf(x + dir, y, WATER); // move water
+                    /*moveHoriz.push({
                             x: x,
                             y: y,
                             nx: x + dir,
                             element: WATER
+                        });*/
+                }
+            } else if (getBuf(x, y) == OIL) { // if we have oil
+                if (getBuf(x, y + 1) == EMPTY) { // if empty below
+                    setBuf(x, y, EMPTY); // clear oil
+                    setBuf(x, y + 1, OIL); // move oil
+                } else if (getBuf(x + dir, y) == EMPTY || getBuf(x + dir, y) == WATER) {
+                    moveHoriz.push({
+                            x: x,
+                            y: y,
+                            nx: x + dir,
+                            element: OIL
                         });
                 }
             }
