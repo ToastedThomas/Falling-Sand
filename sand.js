@@ -12,12 +12,14 @@ var WALL = 1;
 var SAND = 2;
 var WATER = 3;
 var OIL = 4;
+var FIRE = 5;
 var colors = {};
 colors[EMPTY] = '#999';
 colors[WALL] = '#444';
 colors[SAND] = '#ff4';
 colors[WATER] = '#00f';
 colors[OIL] = '#324D25';
+colors[FIRE] = '#C52A29';
 var selectedItem = SAND;
 
 // set all cells to empty
@@ -51,6 +53,7 @@ document.getElementById('wall').onclick = function() {selectItem(WALL);}
 document.getElementById('sand').onclick = function() {selectItem(SAND);}
 document.getElementById('water').onclick = function() {selectItem(WATER);}
 document.getElementById('void').onclick = function() {selectItem(EMPTY);}
+document.getElementById('fire').onclick = function() {selectItem(FIRE);}
 document.getElementById('oil').onclick = function() {selectItem(OIL);}
 
 // setting color of buttons with stored color
@@ -59,6 +62,7 @@ document.getElementById('sand').style.backgroundColor = colors[SAND];
 document.getElementById('water').style.backgroundColor = colors[WATER];
 document.getElementById('void').style.backgroundColor = colors[EMPTY];
 document.getElementById('oil').style.backgroundColor = colors[OIL];
+document.getElementById('fire').style.backgroundColor = colors[FIRE];
 
 function selectItem(item) {
   //make clicked on div the selected element
@@ -120,6 +124,20 @@ function think() {
                             element: OIL
                         });
                 }
+            } else if (getBuf(x, y) == FIRE) { // if we have fire
+                if (getBuf(x, y - 1) == OIL) { // if oil is above
+                    setBuf(x, y - 1, FIRE); // turn oil to fire
+                }
+                if (getBuf(x, y + 1) == OIL) {
+                    setBuf(x, y + 1, FIRE);
+                }
+                if (getBuf(x - 1, y) == OIL) { 
+                    setBuf(x - 1, y, FIRE);
+                }
+                if (getBuf(x + 1, y) == OIL) {
+                    setBuf(x + 1, y, FIRE);
+                }
+                setTimeout(fireBurnOut(x, y), 1000);
             }
         }
         for (var i = 0; i < moveHoriz.length; i++) {
@@ -131,6 +149,10 @@ function think() {
             }
         }
     }
+}
+
+function fireBurnOut(x, y) { // turns fire back into empty
+    setBuf(x, y, EMPTY);
 }
 
 function draw() {
