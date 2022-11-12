@@ -4,14 +4,21 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <canvas id="cvs"></canvas>
-    <div id="elementHolder">
-      <div id="wall">Wall</div>
-      <div id="sand">Sand</div>
-      <div id="water">Water</div>
-      <div id="oil">Oil</div>
-      <div id="fire">Fire</div>
-      <div id="void">Void</div>
+    <div class="container">
+      <div id="infoPanel">
+        <p>Current element: <span id="currentElement">Sand</span></p>
+        <p>Mouse location: (<span id="xCord"></span>, <span id="yCord"></span>)</p>
+      </div>
+      <canvas id="cvs"></canvas>
+      <div id="elementHolder">
+        <div id="wall">Wall</div>
+        <div id="sand">Sand</div>
+        <div id="water">Water</div>
+        <div id="oil">Oil</div>
+        <div id="fire">Fire</div>
+        <div id="void">Void</div>
+      </div>
+      <p id="descText"></p>
     </div>
     <script src="sand.js"></script>
   </body>
